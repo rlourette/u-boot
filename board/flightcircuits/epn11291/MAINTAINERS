@@ -1,0 +1,7 @@
+AM335X BOARD
+M:	Adam Gerken <adam@flightcircuits.com>
+S:	Maintained
+F:	board/flightcircuits/
+F:	include/configs/epn11291.h
+F:	configs/epn11291_defconfig
+
