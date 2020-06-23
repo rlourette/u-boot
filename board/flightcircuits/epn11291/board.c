@@ -358,6 +358,7 @@ void board_fit_image_post_process(void **p_image, size_t *p_size)
 #endif
 
 #if !CONFIG_IS_ENABLED(OF_CONTROL)
+foo XXXTODO
 static const struct omap_hsmmc_plat am335x_mmc1_platdata = {
 	.base_addr = (struct hsmmc *)OMAP_HSMMC2_BASE,
 	.cfg.host_caps = MMC_MODE_HS_52MHz | MMC_MODE_HS | MMC_MODE_8BIT,

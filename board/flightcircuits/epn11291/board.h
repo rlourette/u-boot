@@ -26,6 +26,6 @@
 void enable_strap_pin_mux(void);
 void enable_uart0_pin_mux(void);
 void enable_board_pin_mux(void);
-unsigned char board_detect(void);
+int board_detect(void);
 
 #endif

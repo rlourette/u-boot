@@ -33,6 +33,8 @@ config TARGET_EPN11291
 	select DM
 	select DM_GPIO
 	select DM_SERIAL
+# added imply SPL_OF_CONTROL RWL XXXTODO
+	imply SPL_OF_CONTROL
 	imply CMD_DM
 	imply CMD_DM
 	imply SPL_DM

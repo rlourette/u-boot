@@ -90,13 +90,18 @@ void enable_uart0_pin_mux(void){
 	configure_module_pin_mux(uart0_pin_mux);
 }
 
-unsigned char board_detect(void)
+int board_detect(void)
 {
-	unsigned char board;
+	int board;
 	enable_strap_pin_mux();
 	board = ((GPIO_STRAP3 << 3) + (GPIO_STRAP2 << 2) + (GPIO_STRAP1 << 1) + GPIO_STRAP0);
 	return board;
 }
+
+int gpio_request(unsigned gpio, const char *label);
+int gpio_direction_output(unsigned gpio, int value);
+int gpio_set_value(unsigned gpio, int value);
+
 
 void enable_board_pin_mux(void){
 
