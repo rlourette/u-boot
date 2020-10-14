@@ -231,7 +231,7 @@ static int _do_env_set(int flag, int argc, char *const argv[], int env_flag)
 	char  *name, *value, *s;
 	struct env_entry e, *ep;
 
-	debug("Initial value for argc=%d\n", argc);
+	debug("_do_env_set Initial value for argc=%d\n", argc);
 
 #if CONFIG_IS_ENABLED(CMD_NVEDIT_EFI)
 	if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'e')
@@ -817,7 +817,7 @@ static int do_env_default(struct cmd_tbl *cmdtp, int flag,
 {
 	int all = 0, env_flag = H_INTERACTIVE;
 
-	debug("Initial value for argc=%d\n", argc);
+	debug("do_env_default Initial value for argc=%d\n", argc);
 	while (--argc > 0 && **++argv == '-') {
 		char *arg = *argv;
 
@@ -856,7 +856,7 @@ static int do_env_delete(struct cmd_tbl *cmdtp, int flag,
 	int env_flag = H_INTERACTIVE;
 	int ret = 0;
 
-	debug("Initial value for argc=%d\n", argc);
+	debug("do_env_delete Initial value for argc=%d\n", argc);
 	while (argc > 1 && **(argv + 1) == '-') {
 		char *arg = *++argv;
 

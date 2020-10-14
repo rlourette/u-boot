@@ -36,7 +36,6 @@ config TARGET_EPN11291
 # added imply SPL_OF_CONTROL RWL XXXTODO
 	imply SPL_OF_CONTROL
 	imply CMD_DM
-	imply CMD_DM
 	imply SPL_DM
 	imply SPL_DM_SEQ_ALIAS
 	imply SPL_ENV_SUPPORT

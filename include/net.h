@@ -25,6 +25,7 @@ struct bd_info;
 struct cmd_tbl;
 struct udevice;
 
+// Change here to enable network debugging
 #define DEBUG_LL_STATE 0	/* Link local state machine changes */
 #define DEBUG_DEV_PKT 0		/* Packets or info directed to the device */
 #define DEBUG_NET_PKT 0		/* Packets on info on the network at large */

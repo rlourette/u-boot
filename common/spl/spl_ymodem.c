@@ -8,6 +8,9 @@
  *
  * Matt Porter <mporter@ti.com>
  */
+
+#define DEBUG
+
 #include <common.h>
 #include <gzip.h>
 #include <image.h>
@@ -85,6 +88,8 @@ int spl_ymodem_load_image(struct spl_image_info *spl_image,
 	char buf[BUF_SIZE];
 	struct image_header *ih = NULL;
 	ulong addr = 0;
+
+	serial_printf("spl_ymodem_load_image()\n");
 
 	info.mode = xyzModem_ymodem;
 	ret = xyzModem_stream_open(&info, &err);

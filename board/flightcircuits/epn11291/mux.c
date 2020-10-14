@@ -1,16 +1,7 @@
 /*
  * mux.c
  *
- * Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation version 2.
- *
- * This program is distributed "as is" WITHOUT ANY WARRANTY of any
- * kind, whether express or implied; without even the implied warranty
- * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * Copyright (C) 2020, Flight Circuits <adam@flightcircuits.com>
  */
 
 #include <common.h>
@@ -46,6 +37,19 @@ static struct module_pin_mux uart1_pin_mux[] = {
 	{OFFSET(uart1_rtsn), (MODE(0) | PULLUDDIS)},		//HCI_RTS
 	{-1},
 };
+
+//Set up the SD Card
+static struct module_pin_mux mmc0_pin_mux[] = {
+	{OFFSET(mmc0_dat3), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT3 */
+	{OFFSET(mmc0_dat2), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT2 */
+	{OFFSET(mmc0_dat1), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT1 */
+	{OFFSET(mmc0_dat0), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_DAT0 */
+	{OFFSET(mmc0_clk), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_CLK */
+	{OFFSET(mmc0_cmd), (MODE(0) | RXACTIVE | PULLUP_EN)},	/* MMC0_CMD */
+	{OFFSET(gpmc_a11), (MODE(5) | RXACTIVE | PULLUP_EN)},	/* MMC0_CD */
+	{-1},
+};
+
 
 //Set up the eMMC
 static struct module_pin_mux mmc1_pin_mux[] = {
@@ -83,15 +87,18 @@ static struct module_pin_mux rgmii1_pin_mux[] = {
 };
 
 void enable_strap_pin_mux(void){
+	// while (true); // this is not being called
 	configure_module_pin_mux(strap_pin_mux);
 }
 
 void enable_uart0_pin_mux(void){
+	// while (true); // this is not being called
 	configure_module_pin_mux(uart0_pin_mux);
 }
 
 int board_detect(void)
 {
+	// while (true); // this is not being called
 	int board;
 	enable_strap_pin_mux();
 	board = ((GPIO_STRAP3 << 3) + (GPIO_STRAP2 << 2) + (GPIO_STRAP1 << 1) + GPIO_STRAP0);
@@ -104,9 +111,12 @@ int gpio_set_value(unsigned gpio, int value);
 
 
 void enable_board_pin_mux(void){
+	// while (true); // this is being called
 
 	//EPN11291 Mux
+	configure_module_pin_mux(uart0_pin_mux);
 	configure_module_pin_mux(uart1_pin_mux);
+	configure_module_pin_mux(mmc0_pin_mux);
 	configure_module_pin_mux(mmc1_pin_mux);
 
 	//set eMMC_RSTn high
@@ -114,7 +124,9 @@ void enable_board_pin_mux(void){
 	gpio_direction_output(GPIO_eMMC_RSTn, 0);
 	gpio_set_value(GPIO_eMMC_RSTn, 1);
 
+	// while (true); // we get here
+
 	configure_module_pin_mux(rgmii1_pin_mux);
 
-
+	// while (true); // we get here
 }

@@ -5,6 +5,7 @@
  * Copyright, (C) 2020 Flight Circuits, LLC <adam@flightcircuits.com>
  *
  */
+ // epn11291.dts
 
 /dts-v1/;
 
@@ -23,11 +24,20 @@
 		device_type = "memory";
 		reg = <0x80000000 0x10000000>; /* 256 MB */
 	};
+	// added RWL
+        vmmcsd_fixed: fixedregulator@0 {
+                compatible = "regulator-fixed";
+                regulator-name = "vmmcsd_fixed";
+                regulator-min-microvolt = <3300000>;
+                regulator-max-microvolt = <3300000>;
+        };
 
 };
 
 
 &am33xx_pinmux {
+	u-boot,dm-spl;
+
 	pinctrl-names = "default";
 
 	cpsw_default: cpsw_default {
@@ -81,10 +91,24 @@
 		>;
 	};
 
+	/* see section 9.3.1 - Control Module Registers */
+	mmc0_pins: pinmux-mmc0-pins {
+		u-boot,dm-spl;
+		pinctrl-single,pins = <
+			0x06C (PIN_INPUT_PULLUP | MUX_MODE7)    /* (V17) gpmc_a11 gpio1_2  CD, pullup on board */
+			0x0fc (PIN_INPUT_PULLUP | MUX_MODE0)	/* (G16) mmc0_dat0.mmc0_dat0 */
+			0x0f8 (PIN_INPUT_PULLUP | MUX_MODE0)	/* (G15) mmc0_dat1.mmc0_dat1 */
+			0x0f4 (PIN_INPUT_PULLUP | MUX_MODE0)	/* (F18) mmc0_dat2.mmc0_dat2 */
+			0x0f0 (PIN_INPUT_PULLUP | MUX_MODE0)	/* (F17) mmc0_dat3.mmc0_dat3 */
+			0x104 (PIN_INPUT_PULLUP | MUX_MODE0)	/* (G18) mmc0_cmd.mmc0_cmd */
+			0x100 (PIN_INPUT_PULLUP | MUX_MODE0)	/* (G17) mmc0_clk.mmc0_clk */
+		>;
+	};
 
 	emmc_pins: pinmux_emmc_pins {
+		u-boot,dm-spl;
 		pinctrl-single,pins = <
-			0x080 (PIN_INPUT | MUX_MODE2)		//eMMC_CLK
+			0x080 (PIN_INPUT | MUX_MODE2)			//eMMC_CLK
 			0x084 (PIN_INPUT_PULLUP | MUX_MODE2)	//eMMC_CMD
 			0x000 (PIN_INPUT_PULLUP | MUX_MODE1)	//eMMC_D0
 			0x004 (PIN_INPUT_PULLUP | MUX_MODE1)	//eMMC_D1
@@ -99,6 +123,7 @@
 
 
 	uart0_pins: pinmux_uart0_pins {
+		u-boot,dm-spl;
 		pinctrl-single,pins = <
 			0x170 (PIN_INPUT_PULLUP | MUX_MODE0)	//UART0_RX
 			0x174 (PIN_OUTPUT_PULLDOWN | MUX_MODE0)	//UAERT0_TX
@@ -108,11 +133,13 @@
 };
 
 &cpsw_emac0 {
+	u-boot,dm-spl;
 	phy-handle = <&ethphy0>;
 	phy-mode = "rgmii";
 };
 
 &mac {
+	u-boot,dm-spl;
 	slaves = <1>;
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&cpsw_default>;
@@ -121,31 +148,51 @@
 };
 
 &davinci_mdio {
+	u-boot,dm-spl;
 	pinctrl-names = "default", "sleep";
 	pinctrl-0 = <&davinci_mdio_default>;
 	pinctrl-1 = <&davinci_mdio_sleep>;
 	status = "okay";
 
-	ethphy0: ethernet-phy@0 {
+	ethphy0: ethernet-phy@0{
 		reg = <0>;
 	};
 };
 
+/* SD Card */
+&mmc1 {
+	u-boot,dm-spl;
+	max-frequency = <50000000>;
+	bus-width = <4>;
+	// added RWL
+	vmmc-supply = <&vmmcsd_fixed>;
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc0_pins>;
+	cd-gpios = <&gpio1 27 GPIO_ACTIVE_LOW>;
+	// disable-wp;
+};
+
 &mmc2 {
+	u-boot,dm-spl;
 	pinctrl-names = "default";
 	pinctrl-0 = <&emmc_pins>;
 	bus-width = <8>;
+	// added RWL
+	vmmc-supply = <&vmmcsd_fixed>;
 	ti,non-removable;
 	max-frequency = <96000000>;
 	status = "okay";
 };
 
 &uart0 {
+	u-boot,dm-spl;
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart0_pins>;
 	status = "okay";
 };
 
 &cppi41dma  {
+	u-boot,dm-spl;
 	status = "okay";
 };

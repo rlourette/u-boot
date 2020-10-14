@@ -6,6 +6,8 @@
 #ifndef __INITCALL_H
 #define __INITCALL_H
 
+#define DEBUG
+
 typedef int (*init_fnc_t)(void);
 
 #include <log.h>

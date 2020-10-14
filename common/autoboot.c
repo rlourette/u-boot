@@ -23,6 +23,8 @@
 #include <u-boot/sha256.h>
 #include <bootcount.h>
 
+#define DEBUG
+
 DECLARE_GLOBAL_DATA_PTR;
 
 #define MAX_DELAY_STOP_STR 32

@@ -46,7 +46,10 @@ static int bootz_start(struct cmd_tbl *cmdtp, int flag, int argc,
 
 	ret = bootz_setup(images->ep, &zi_start, &zi_end);
 	if (ret != 0)
+	{
+		debug("bootz_start: bootz_setup returned = %d\n", ret);
 		return 1;
+	}
 
 	lmb_reserve(&images->lmb, images->ep, zi_end - zi_start);
 
@@ -54,9 +57,12 @@ static int bootz_start(struct cmd_tbl *cmdtp, int flag, int argc,
 	 * Handle the BOOTM_STATE_FINDOTHER state ourselves as we do not
 	 * have a header that provide this informaiton.
 	 */
-	if (bootm_find_images(flag, argc, argv))
+	ret = bootm_find_images(flag, argc, argv);
+	if (ret)
+	{
+		debug("bootz_start: bootm_find_images returned = %d\n", ret);
 		return 1;
-
+	}
 	return 0;
 }
 
@@ -67,8 +73,12 @@ int do_bootz(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])
 	/* Consume 'bootz' */
 	argc--; argv++;
 
-	if (bootz_start(cmdtp, flag, argc, argv, &images))
+	ret = bootz_start(cmdtp, flag, argc, argv, &images);
+	if (ret)
+	{
+		debug("do_bootz: bootz_start returned = %d\n", ret);
 		return 1;
+	}
 
 	/*
 	 * We are doing the BOOTM_STATE_LOADOS state ourselves, so must
@@ -84,6 +94,8 @@ int do_bootz(struct cmd_tbl *cmdtp, int flag, int argc, char *const argv[])
 			      BOOTM_STATE_OS_PREP | BOOTM_STATE_OS_FAKE_GO |
 			      BOOTM_STATE_OS_GO,
 			      &images, 1);
+
+	debug("do_bootz: do_bootm_states returned = %d\n", ret);
 
 	return ret;
 }

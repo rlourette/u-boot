@@ -700,6 +700,9 @@ int fdtdec_parse_phandle_with_args(const void *blob, int src_node,
 	int node = -1;
 	int phandle;
 
+	debug("%s: list_name(%s) cells_name(%s)\n", __func__, list_name, cells_name ? cells_name : "null");
+
+
 	/* Retrieve the phandle list property */
 	list = fdt_getprop(blob, src_node, list_name, &size);
 	if (!list)

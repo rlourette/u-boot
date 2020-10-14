@@ -318,7 +318,7 @@ int eth_init(void)
 	struct eth_device *old_current;
 
 	if (!eth_current) {
-		puts("No ethernet found.\n");
+		puts("No ethernet found..\n");
 		return -ENODEV;
 	}
 
